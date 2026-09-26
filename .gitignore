@@ -1,0 +1,24 @@
+# Publish source only; local deployment and playtest records stay private.
+/*
+!/.gitignore
+!/README.md
+!/package.json
+!/package-lock.json
+!/index.html
+!/start-server.mjs
+!/tsconfig.json
+!/tsconfig.tests.json
+!/vite.config.ts
+!/src/
+!/server/
+!/tests/
+!/docs/
+/docs/*
+!/docs/ATMOSPHERE.md
+!/docs/DEVICE-EDITION.md
+!/docs/COMBAT-AND-SESSIONS.md
+**/.DS_Store
+**/.env*
+**/*.pem
+**/*.key
+**/*.log

@@ -1,0 +1,405 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  /* 地面站灰：中性墨色打底，不偏绿 */
+  --ink-0: #0d1116;
+  --ink-1: #12171e;
+  --ink-2: #171e26;
+  --ink-3: #1f2731;
+  --line: #2a333d;
+  --hairline: #212a33;
+  --txt: #cdd5da;
+  --dim: #8d99a2;
+  --faint: #5b6770;
+  /* 信号琥珀：现场席 / 主要行动 */
+  --amber: #d99a35;
+  --amber-hi: #ecb154;
+  --amber-ink: #1a130a;
+  /* 远端钴蓝：AI 席位专属色 */
+  --remote: #6f9cc4;
+  --remote-hi: #9dc0da;
+  /* 告警红 */
+  --danger: #c05a4e;
+  --danger-hi: #d68a80;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ink-0);
+  color: var(--txt);
+  font-family: "DIN Alternate", "SF Mono", ui-monospace, "Menlo", "Consolas",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-feature-settings: "tnum";
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  background-image:
+    radial-gradient(130% 100% at 50% -10%, rgba(111, 156, 196, 0.055), transparent 55%),
+    linear-gradient(rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.016) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 28px,
+    28px 100%;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink-1);
+}
+::-webkit-scrollbar-thumb {
+  background: #2c3640;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a4650;
+}
+
+textarea,
+input,
+select,
+button {
+  font-family: inherit;
+}
+
+/* ── 作战台面板 ── */
+.bay {
+  box-shadow: inset 0 1px 0 rgba(205, 213, 218, 0.04);
+}
+
+/* ── 主行动键 ── */
+.action-key {
+  position: relative;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), inset 0 -2px 0 rgba(0, 0, 0, 0.4), 0 1px 0 #05070a;
+}
+.action-key::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: currentColor;
+  opacity: 0.65;
+}
+.action-key:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ── 状态灯 ── */
+.status-lamp {
+  box-shadow: 0 0 7px currentColor;
+}
+
+/* ── 声呐方位盘 ── */
+.sonar-bearing {
+  background:
+    radial-gradient(circle at center, rgba(217, 154, 53, 0.1), transparent 70%),
+    #0c1116;
+  letter-spacing: 0.04em;
+}
+
+/* ── 上下文卡片出现 ── */
+.context-card {
+  animation: context-in 0.16s ease-out;
+}
+@keyframes context-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ── 地图：扫描波纹 / 舱门变化 / 断电渐隐 / 危险提示 ── */
+.scan-wave {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: scan-wave 1.35s ease-out forwards;
+}
+@keyframes scan-wave {
+  0% { opacity: 0.9; transform: scale(0.55); }
+  100% { opacity: 0; transform: scale(5.5); }
+}
+
+.door-change {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: door-change 0.75s ease-out;
+}
+@keyframes door-change {
+  0% { opacity: 0.25; transform: scale(1.75); }
+  55% { opacity: 1; transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+.power-fade {
+  animation: power-fade 0.65s ease-out both;
+}
+@keyframes power-fade {
+  from { opacity: 0; }
+  to { opacity: 0.5; }
+}
+
+.danger-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: danger-once 1.15s ease-out 2;
+}
+@keyframes danger-once {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.28); }
+}
+
+/* ── 地图标记：只在新钉上时闪一次 ── */
+.ping-fresh {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ping-once 1s ease-out 2;
+}
+@keyframes ping-once {
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.35); }
+}
+
+/* ── 危险读数呼吸 ── */
+.vital-danger {
+  animation: vital-danger 1.3s ease-in-out infinite;
+}
+@keyframes vital-danger {
+  50% { opacity: 0.45; }
+}
+
+.blink {
+  animation: blink 1.6s steps(2, start) infinite;
+}
+@keyframes blink {
+  50% { opacity: 0.35; }
+}
+
+.fade-in {
+  animation: fadein 0.35s ease-out;
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* ── 新消息滑入 ── */
+.msg-in {
+  animation: msg-in 0.22s ease-out;
+}
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+
+/* ── 建议卡片高亮边 ── */
+.suggest-hot {
+  box-shadow: inset 2px 0 0 var(--amber);
+}
+
+/* ── 开始界面标题刻度线 ── */
+.title-rule {
+  background-image: repeating-linear-gradient(90deg, var(--line) 0 14px, transparent 14px 20px);
+  height: 2px;
+}
+
+/* 所有效果只叠在地图的视觉层，命中测试始终穿透。 */
+.atmosphere-layer,
+.atmosphere-layer * {
+  pointer-events: none !important;
+  user-select: none;
+}
+.atmosphere-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+  isolation: isolate;
+}
+.atmosphere-edge {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(ellipse at 48% 44%, transparent 36%, rgba(3, 5, 8, 0.55) 100%);
+  transition: opacity 1.8s ease;
+}
+.edge-dark { opacity: calc(0.42 * var(--atmosphere-strength, 1)); }
+.edge-oxygen {
+  opacity: calc(0.62 * var(--atmosphere-strength, 1));
+  background: radial-gradient(ellipse at 48% 44%, transparent 23%, rgba(3, 5, 8, 0.55) 100%);
+}
+.station-tremor { animation: hull-settle 700ms ease-out both; }
+@keyframes hull-settle {
+  0%, 100% { transform: translate(0, 0); }
+  18% { transform: translate(1.5px, -0.5px); }
+  38% { transform: translate(-1px, 1px); }
+  66% { transform: translate(0.5px, -0.5px); }
+}
+.lamp-dip {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(ellipse, transparent 28%, #020408 100%);
+  animation: contact-dip 1.5s ease-in-out forwards;
+}
+@keyframes contact-dip {
+  0%, 100% { opacity: 0; }
+  35% { opacity: calc(0.3 * var(--atmosphere-strength, 1)); }
+  60% { opacity: calc(0.12 * var(--atmosphere-strength, 1)); }
+}
+.ambient-fog {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 86% 62%, rgba(163, 181, 190, 0.1), transparent 55%);
+}
+.fog-glimpse {
+  position: absolute;
+  opacity: 0;
+  right: 8%;
+  top: 28%;
+  width: 19%;
+  height: 38%;
+  color: #74808b;
+  filter: blur(4px);
+  animation: fog-pass 3.8s ease-in-out forwards;
+}
+.glass-trace {
+  position: absolute;
+  opacity: 0;
+  top: 23%;
+  right: 7%;
+  width: 21%;
+  height: 38%;
+  color: #a2b3bc;
+  filter: blur(2.5px);
+  transform: rotate(-14deg);
+  animation: glass-mist 4.2s ease-out forwards;
+}
+@keyframes fog-pass {
+  0%, 100% { opacity: 0; }
+  38% { opacity: calc(0.23 * var(--atmosphere-strength, 1)); }
+}
+@keyframes glass-mist {
+  0% { opacity: 0; }
+  22% { opacity: calc(0.28 * var(--atmosphere-strength, 1)); }
+  100% { opacity: 0; }
+}
+.perception-caption {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 46px;
+  max-width: 440px;
+  padding: 11px 14px;
+  background: rgba(12, 16, 21, 0.91);
+  border-left: 1px solid #718693;
+  animation: perception-caption 4.8s ease forwards;
+}
+.perception-caption span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  color: #6e8797;
+}
+.perception-caption p {
+  margin: 5px 0 0;
+  color: #bfccd3;
+  font-size: 13px;
+  line-height: 1.75;
+}
+@keyframes perception-caption {
+  0% { opacity: 0; }
+  18%, 85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.link-hesitation { position: relative; }
+.link-hesitation::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 6px, rgba(147, 170, 187, 0.05) 6px 7px);
+  animation: link-redraw 900ms ease-out forwards;
+}
+@keyframes link-redraw {
+  0%, 100% { opacity: 0; }
+  45% { opacity: 0.8; }
+  62% { opacity: 0.2; }
+}
+.comfort-setting {
+  margin: 4px 0;
+  padding: 8px 10px;
+  border-top: 1px solid #26313b;
+  border-bottom: 1px solid #26313b;
+}
+.comfort-setting legend { font-size: 11px; color: #9babb5; padding: 0 4px; }
+.comfort-setting > div { display: flex; gap: 4px; }
+.comfort-setting button {
+  flex: 1;
+  min-height: 32px;
+  border: 1px solid #313d47;
+  font-size: 11px;
+  color: #8196a2;
+}
+.comfort-setting button[aria-pressed='true'] { color: #c7deed; background: #1b2a36; border-color: #526e83; }
+.comfort-setting p { white-space: normal; margin: 8px 0 0; color: #667e8d; font-size: 10px; line-height: 1.6; }
+.knock-choice { flex-shrink: 0; padding: 12px; border: 1px solid #635035; background: #19160f; }
+.knock-choice > div:first-child { color: #cebc99; font-size: 13px; letter-spacing: 0.06em; }
+.knock-choice p { color: #9f9685; margin: 5px 0 10px; font-size: 12px; }
+.knock-choice small { color: #7f7768; display: block; font-size: 10px; margin-top: 8px; line-height: 1.6; }
+.knock-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.knock-actions button { min-height: 36px; }
+.terminal-advisory { margin: 6px 0; padding: 8px 10px; border-left: 1px solid #506174; background: #121922; }
+.terminal-advisory strong { font-size: 10px; font-weight: normal; color: #8099af; }
+.terminal-advisory p { margin: 4px 0 0; font-size: 11px; line-height: 1.7; color: #a9b6c0; }
+button:focus-visible, summary:focus-visible { outline: 2px solid #809cb2; outline-offset: 3px; }
+
+[data-atmosphere-mode='reduced'] .station-tremor,
+[data-atmosphere-mode='off'] .station-tremor,
+[data-atmosphere-mode='reduced'] .vital-danger,
+[data-atmosphere-mode='off'] .vital-danger { animation: none; }
+[data-atmosphere-mode='reduced'] .fog-glimpse,
+[data-atmosphere-mode='reduced'] .glass-trace { filter: blur(5px); }
+[data-atmosphere-mode='off'] .atmosphere-layer { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .station-tremor,
+  .lamp-dip,
+  .fog-glimpse,
+  .glass-trace,
+  .perception-caption,
+  .link-hesitation::after,
+  .scan-wave,
+  .door-change,
+  .power-fade,
+  .danger-pulse,
+  .ping-fresh,
+  .vital-danger,
+  .blink,
+  .fade-in,
+  .msg-in,
+  .context-card {
+    animation: none !important;
+  }
+}
